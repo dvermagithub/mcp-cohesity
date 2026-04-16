@@ -1,0 +1,77 @@
+Source-Available Non-Commercial License
+
+Copyright (c) 2026 Deepak Verma. All rights reserved.
+
+Inspired by the original mcp-cohesity project by Fredrik Karlsson
+(fredriksknese/mcp-cohesity), which demonstrated the concept of an MCP
+server for Cohesity. This project has been entirely rewritten from scratch
+with 56 tools, new API integrations, and a new architecture — no original
+code remains.
+
+1. GRANT OF RIGHTS
+
+   Permission is hereby granted, free of charge, to any individual obtaining
+   a copy of this software and associated documentation files (the
+   "Software"), to:
+
+   (a) View, study, and learn from the source code;
+   (b) Fork, modify, and experiment with the Software for personal,
+       educational, or non-commercial research purposes;
+   (c) Use the Software in home lab, personal, or non-commercial
+       environments without restriction;
+   (d) Share and reference this work with attribution to the author.
+
+2. COMMERCIAL USE PROHIBITED
+
+   Without the prior written consent of the copyright holder (Deepak Verma),
+   no person, company, organization, or entity may:
+
+   (a) Use the Software, in whole or in part, for any commercial purpose,
+       including but not limited to integrating it into commercial products,
+       offering it as part of a paid service, or using it in production
+       environments that generate revenue;
+   (b) Sell, sublicense, lease, or otherwise commercialize the Software;
+   (c) Use the Software to provide managed services, consulting services,
+       or SaaS offerings to third parties;
+   (d) Incorporate the Software into proprietary products or platforms.
+
+   This restriction applies to all entities without exception.
+
+3. ATTRIBUTION
+
+   Any permitted use, distribution, or derivative work must:
+
+   (a) Retain this license in its entirety;
+   (b) Clearly attribute the work to Deepak Verma as the primary author;
+   (c) Acknowledge the original foundation by Fredrik Karlsson.
+
+4. CONTRIBUTIONS
+
+   By submitting contributions (pull requests, patches, issues) to this
+   repository, contributors agree that their contributions are licensed
+   under the same terms as this license and assign copyright to the
+   copyright holder.
+
+5. NO WARRANTY
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+6. LIMITATION OF LIABILITY
+
+   IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES,
+   OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE,
+   ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+   OTHER DEALINGS IN THE SOFTWARE.
+
+7. TERMINATION
+
+   This license is automatically terminated if you violate any of its terms.
+   Upon termination, you must cease all use of the Software and destroy all
+   copies in your possession.
+
+8. COMMERCIAL LICENSING
+
+   To obtain a commercial license, contact: Deepak Verma
+   GitHub: https://github.com/dvermagithub
