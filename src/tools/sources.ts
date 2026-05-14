@@ -71,15 +71,15 @@ export function registerSourcesTools(
     },
     async ({ environments, include_data_store_details }) => {
       try {
-        const params: Record<string, string> = {
-          includeDataStoreDetails: String(include_data_store_details),
-        };
-        if (environments) {
-          params.environments = environments.join(",");
-        }
+        const params: Record<string, string> = {};
+        if (environments) params.environments = environments.join(",");
+        if (include_data_store_details) params.includeApplicationsTreeInfo = "true";
 
+        // /v2/data-protect/sources is not exposed on all cluster builds (some
+        // return 404). /sources/registrations is reliably present and returns
+        // the same logical set with richer per-source metadata.
         const result = await client.getV2(
-          "data-protect/sources",
+          "data-protect/sources/registrations",
           params,
         );
         return toolResult(JSON.stringify(result, null, 2));

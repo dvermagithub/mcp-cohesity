@@ -71,19 +71,43 @@ export function registerStatsTools(
   );
 
   // ── Replication Clusters ─────────────────────────────────────────────
+  // The cluster requires startTimeMsecs, rollupIntervalSecs, and
+  // targetClusterList. Defaults: last 30 days, daily rollup, all clusters.
   server.tool(
     "get_replication_clusters",
     "Get list of remote replication clusters with total data replicated to/from each. Shows replication partner health at a glance.",
     {
+      start_time_msecs: z
+        .number()
+        .optional()
+        .describe("Start of stats window in Unix milliseconds (default: 30 days ago)"),
+      rollup_interval_secs: z
+        .number()
+        .optional()
+        .default(86400)
+        .describe("Granularity in seconds (default: 86400 = daily)"),
+      target_cluster_ids: z
+        .array(z.number())
+        .optional()
+        .describe("Restrict to these target cluster IDs (default: all clusters)"),
       is_inbound: z
         .boolean()
         .optional()
         .default(false)
         .describe("If true, returns inbound replication stats. Default is outbound."),
     },
-    async ({ is_inbound }) => {
+    async ({ start_time_msecs, rollup_interval_secs, target_cluster_ids, is_inbound }) => {
       try {
+        const startMs = start_time_msecs ?? Date.now() - 30 * 86400 * 1000;
+        const targets =
+          target_cluster_ids?.length
+            ? target_cluster_ids.join(",")
+            : "0"; // 0 = treat as 'all'; cluster accepts and returns all
+
         const params: Record<string, string> = {
+          startTimeMsecs: String(startMs),
+          rollupIntervalSecs: String(rollup_interval_secs),
+          targetClusterList: targets,
           isInBound: String(is_inbound),
         };
 

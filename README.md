@@ -4,7 +4,9 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for **C
 
 > Inspired by [fredriksknese/mcp-cohesity](https://github.com/fredriksknese/mcp-cohesity). Entirely rewritten from scratch.
 
-**92 tools across 20 categories**, every tool driven by the cluster's OpenAPI v2 spec and live-validated against a real cluster.
+**107 tools across 23 categories**, every tool driven by the cluster's OpenAPI v2 spec and live-validated against a real cluster.
+
+A full QA test report covering every tool is checked into [tests/TEST_REPORT.md](tests/TEST_REPORT.md), and the harness that produced it ([tests/qa-harness.mjs](tests/qa-harness.mjs)) can be re-run against any cluster.
 
 ---
 
@@ -32,6 +34,9 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for **C
 | [Users](#users-6-tools) | 6 |
 | [Roles](#roles-4-tools) | 4 |
 | [Active Directory](#active-directory-3-tools) | 3 |
+| [Antivirus / Threat Detection](#antivirus--threat-detection-7-tools) | 7 |
+| [KMS / Encryption Keys](#kms--encryption-keys-6-tools) | 6 |
+| [Clones](#clones-3-tools) | 3 |
 
 ---
 
@@ -237,6 +242,39 @@ Reports derived from V1 cluster-local endpoints plus synthesized Markdown report
 | `join_active_directory` | Join the cluster to an AD domain |
 | `leave_active_directory` | Remove an AD from the cluster |
 
+### Antivirus / Threat Detection (7 tools)
+
+On-prem ICAP-based antivirus. (Anomaly / ransomware behavioural detection is a Helios-only SaaS feature and is not exposed on standalone clusters.)
+
+| Tool | Description |
+|---|---|
+| `list_antivirus_groups` | List antivirus service groups (each bundles ICAP servers) |
+| `create_antivirus_group` | Create a new antivirus group with one or more ICAP services |
+| `get_antivirus_group` | Get a single antivirus group by ID |
+| `update_antivirus_group` | Update an antivirus group's name, services, or state |
+| `delete_antivirus_group` | Delete an antivirus group |
+| `check_icap_connection` | Probe an ICAP URI and return reachability |
+| `list_infected_files` | List files an antivirus service has flagged as infected |
+
+### KMS / Encryption Keys (6 tools)
+
+| Tool | Description |
+|---|---|
+| `list_kms_configurations` | List Key Management Systems (Internal, AWS, KMIP, IBM, GCP) |
+| `add_aws_kms` | Register an AWS KMS as an encryption key source |
+| `add_kmip_kms` | Register a KMIP-compliant KMS (Thales, Fortanix, etc.) |
+| `update_kms` | Update assignments or rename an existing KMS |
+| `delete_kms` | Delete a KMS configuration (internal KMS cannot be deleted) |
+| `get_external_target_encryption_key` | Get the encryption key associated with an external target |
+
+### Clones (3 tools)
+
+| Tool | Description |
+|---|---|
+| `list_clone_tasks` | List active and historical clone tasks (CloneVMs, CloneView, CloneAppView) |
+| `clone_view` | Clone a file-services View into a new space-efficient View |
+| `delete_clone_task` | Delete a restore clone task and release its space |
+
 ---
 
 ## Key Engineering Notes
@@ -334,6 +372,25 @@ npm run build    # Compile TypeScript to dist/
 npm start        # Run compiled output
 ```
 
+## QA Harness
+
+A self-contained QA harness in [tests/qa-harness.mjs](tests/qa-harness.mjs) exercises every tool against a live cluster across three suites:
+
+1. **CONNECTIVITY** — auth + cluster reachability
+2. **DIRECT_API** — every backing HTTP endpoint, with safe probes for write operations
+3. **MCP_TRANSPORT** — spawns the compiled server, verifies `tools/list`, and invokes a representative subset of read-only tools through the actual MCP protocol
+
+Run it:
+
+```bash
+COHESITY_CLUSTER=192.0.2.10 \
+COHESITY_USERNAME=admin \
+COHESITY_PASSWORD=... \
+node tests/qa-harness.mjs
+```
+
+The harness writes [tests/TEST_REPORT.md](tests/TEST_REPORT.md) and `tests/test-results.json` on every run.
+
 ## Architecture
 
 ```
@@ -360,7 +417,10 @@ src/
     ├── audit-logs.ts           # Audit log queries (3 tools)
     ├── users.ts                # User management (6 tools)
     ├── roles.ts                # Role management (4 tools)
-    └── active-directory.ts     # AD join/leave (3 tools)
+    ├── active-directory.ts     # AD join/leave (3 tools)
+    ├── antivirus.ts            # ICAP antivirus + infected files (7 tools)
+    ├── kms.ts                  # KMS / encryption keys (6 tools)
+    └── clones.ts               # View clones + clone tasks (3 tools)
 ```
 
 ## API Details

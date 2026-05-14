@@ -1,0 +1,877 @@
+[
+  {
+    "suite": "CONNECTIVITY",
+    "name": "auth.access-tokens",
+    "status": "PASS",
+    "detail": "token len=708",
+    "ts": 1778794582567
+  },
+  {
+    "suite": "CONNECTIVITY",
+    "name": "GET /v2/clusters",
+    "status": "PASS",
+    "detail": "HTTP 200 name=vCenter-Cohesity v=?",
+    "ts": 1778794582606
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_cluster_info",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794582642
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_cluster_stats",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794582736
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "register_vmware_source (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794587896
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "register_physical_source (shape)",
+    "status": "PASS",
+    "detail": "HTTP 403 KInvalidRequest",
+    "ts": 1778794596952
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "register_azure_source (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794596995
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "register_aws_source (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794851160
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "register_m365_source (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794851198
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "register_nas_source (shape)",
+    "status": "PASS",
+    "detail": "HTTP 403 KInvalidRequest",
+    "ts": 1778794866518
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "update_source_registration (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794866553
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "unregister_source (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794866589
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_sources",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794866625
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_source",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794866662
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "search_objects",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794866704
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "refresh_source",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794866740
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_protection_policies",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794866779
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "create_protection_policy (shape)",
+    "status": "PASS",
+    "detail": "HTTP 201",
+    "ts": 1778794866827
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "update_protection_policy (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794866901
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "delete_protection_policy (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794866939
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_protection_groups",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794866978
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_protection_group",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794867018
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "create_protection_group (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794867060
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "update_protection_group (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794867094
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "delete_protection_group (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794867128
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "run_protection_group (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794867167
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "pause_protection_group / resume_protection_group (shape via /states)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794867206
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_protection_runs",
+    "status": "PASS",
+    "detail": "HTTP 400 KQueryParamParseError",
+    "ts": 1778794867244
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_protection_run",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794867285
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "cancel_protection_run (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794867327
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "cancel_recovery_task (shape)",
+    "status": "PASS",
+    "detail": "HTTP 404 KEntityNotExistsError",
+    "ts": 1778794867368
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "set_snapshot_datalock / legal_hold / retention / delete (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794867403
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_storage_domains",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794867443
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_objects",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794867484
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_snapshots",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794867526
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "browse_snapshot_files",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794867566
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_recovery_tasks",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794867636
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_recovery_task",
+    "status": "PASS",
+    "detail": "HTTP 404 KEntityNotExistsError",
+    "ts": 1778794867674
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "search_files",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794867715
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "recover_vm (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KQueryParamParseError",
+    "ts": 1778794867753
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "recover_files (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794867791
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_alerts",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794867827
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "resolve_alert (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794870872
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_notification_rules",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794870913
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "create_notification_rule (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794870954
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "update_notification_rule (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794870987
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "delete_notification_rule (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794871023
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_external_targets",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794871062
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_external_target",
+    "status": "PASS",
+    "detail": "HTTP 404 KEntityNotExistsError",
+    "ts": 1778794871103
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "create_external_target_aws (shape)",
+    "status": "MANUAL",
+    "detail": "HTTP 400 KValidationError — Cannot fully validate without real AWS credentials",
+    "ts": 1778794871143
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "create_external_target_azure (shape)",
+    "status": "MANUAL",
+    "detail": "HTTP 400 KValidationError — Cannot fully validate without real Azure credentials",
+    "ts": 1778794871182
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "delete_external_target (shape)",
+    "status": "PASS",
+    "detail": "HTTP 404 KEntityNotExistsError",
+    "ts": 1778794871219
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_tiering_tasks",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794871259
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_tiering_task",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794871298
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "create_tiering_task (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794871337
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "run_tiering_task (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794871376
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "update_tiering_task_state (shape)",
+    "status": "PASS",
+    "detail": "HTTP 404",
+    "ts": 1778794871413
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "delete_tiering_task (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794871448
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_protection_heatmap",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794871495
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_protection_summary",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794871534
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_recovery_summary",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794871612
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_protected_objects_trend_report",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794871652
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_sources_jobs_summary_report",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794871694
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_archival_transfer_report",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794871732
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "generate_protection_summary_report",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794871775
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "generate_failed_backups_report",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794871813
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "generate_capacity_report",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794871938
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_cluster_storage_stats",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794872030
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_workload_stats",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794872141
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_replication_backlog",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794872181
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_replication_clusters",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794872219
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_replication_data_trend",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794872257
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_replication_objects",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794872295
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_audit_logs",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794872332
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_audit_log_actions",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794872367
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_audit_log_entity_types",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794872405
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_users",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794872443
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_user",
+    "status": "PASS",
+    "detail": "HTTP 404 KEntityNotExistsError",
+    "ts": 1778794872488
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "create_local_user (shape)",
+    "status": "PASS",
+    "detail": "HTTP 201",
+    "ts": 1778794872612
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "create_ad_user (shape)",
+    "status": "MANUAL",
+    "detail": "HTTP 400 KValidationError — Cannot fully validate without joined AD domain",
+    "ts": 1778794872721
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "update_user (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794872753
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "delete_users (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794872797
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_roles",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794872835
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "create_role (shape)",
+    "status": "PASS",
+    "detail": "HTTP 201",
+    "ts": 1778794872880
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "update_role (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794872954
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "delete_role (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794872989
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_active_directories",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794873022
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "join_active_directory (shape)",
+    "status": "MANUAL",
+    "detail": "HTTP 500 KInternalError — Cannot fully validate without real AD credentials",
+    "ts": 1778794873061
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "leave_active_directory (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794873093
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_antivirus_groups",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794873129
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "create_antivirus_group (shape)",
+    "status": "PASS",
+    "detail": "HTTP 201",
+    "ts": 1778794873191
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_antivirus_group",
+    "status": "PASS",
+    "detail": "HTTP 404",
+    "ts": 1778794873287
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "update_antivirus_group (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794873322
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "delete_antivirus_group (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794873354
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "check_icap_connection",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794873391
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_infected_files",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794873435
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_kms_configurations",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794873474
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "add_aws_kms (shape)",
+    "status": "MANUAL",
+    "detail": "HTTP 500 KInternalError — Cannot fully validate without real AWS KMS",
+    "ts": 1778794873514
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "add_kmip_kms (shape)",
+    "status": "MANUAL",
+    "detail": "HTTP 400 KValidationError — Cannot fully validate without real KMIP server",
+    "ts": 1778794873554
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "update_kms (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794873588
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "delete_kms (shape)",
+    "status": "PASS",
+    "detail": "HTTP 400 KValidationError",
+    "ts": 1778794873621
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "get_external_target_encryption_key",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794873660
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "list_clone_tasks",
+    "status": "PASS",
+    "detail": "HTTP 200",
+    "ts": 1778794873700
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "clone_view (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794873736
+  },
+  {
+    "suite": "DIRECT_API",
+    "name": "delete_clone_task (shape)",
+    "status": "PASS",
+    "detail": "HTTP 500 KInternalError",
+    "ts": 1778794873770
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "initialize",
+    "status": "PASS",
+    "detail": "serverInfo={\"name\":\"cohesity\",\"version\":\"2.0.0\"}",
+    "ts": 1778794875298
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/list",
+    "status": "PASS",
+    "detail": "107 tools advertised",
+    "ts": 1778794875311
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call get_cluster_info",
+    "status": "PASS",
+    "detail": "2945 bytes",
+    "ts": 1778794875615
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call get_cluster_stats",
+    "status": "PASS",
+    "detail": "3524 bytes",
+    "ts": 1778794875789
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_sources",
+    "status": "PASS",
+    "detail": "1531 bytes",
+    "ts": 1778794875829
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_protection_groups",
+    "status": "PASS",
+    "detail": "13786 bytes",
+    "ts": 1778794875875
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_protection_policies",
+    "status": "PASS",
+    "detail": "7427 bytes",
+    "ts": 1778794875926
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_alerts",
+    "status": "PASS",
+    "detail": "70546 bytes",
+    "ts": 1778794875976
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_audit_logs",
+    "status": "PASS",
+    "detail": "37092 bytes",
+    "ts": 1778794876023
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_users",
+    "status": "PASS",
+    "detail": "944 bytes",
+    "ts": 1778794876065
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_roles",
+    "status": "PASS",
+    "detail": "11682 bytes",
+    "ts": 1778794876106
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_active_directories",
+    "status": "PASS",
+    "detail": "31 bytes",
+    "ts": 1778794876143
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_kms_configurations",
+    "status": "PASS",
+    "detail": "206 bytes",
+    "ts": 1778794876184
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_antivirus_groups",
+    "status": "PASS",
+    "detail": "36 bytes",
+    "ts": 1778794876223
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_clone_tasks",
+    "status": "PASS",
+    "detail": "24 bytes",
+    "ts": 1778794876268
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_storage_domains",
+    "status": "PASS",
+    "detail": "988 bytes",
+    "ts": 1778794876309
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_external_targets",
+    "status": "PASS",
+    "detail": "29 bytes",
+    "ts": 1778794876347
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_tiering_tasks",
+    "status": "PASS",
+    "detail": "2 bytes",
+    "ts": 1778794876387
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_recovery_tasks",
+    "status": "PASS",
+    "detail": "22565 bytes",
+    "ts": 1778794876458
+  },
+  {
+    "suite": "MCP_TRANSPORT",
+    "name": "tools/call list_notification_rules",
+    "status": "PASS",
+    "detail": "2 bytes",
+    "ts": 1778794876531
+  }
+]

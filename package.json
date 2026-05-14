@@ -1,7 +1,7 @@
 {
   "name": "mcp-cohesity",
   "version": "2.0.0",
-  "description": "MCP server for Cohesity DataProtect — 92 tools across 20 categories for source registration, backup, recovery, retention/WORM, archival, monitoring, reporting, identity, and audit",
+  "description": "MCP server for Cohesity DataProtect — 107 tools across 23 categories for source registration, backup, recovery, retention/WORM, archival, monitoring, reporting, identity, audit, antivirus, KMS, and clones",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -16,6 +16,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
+    "test": "node tests/qa-harness.mjs",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -45,7 +46,8 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "tsx": "^4.19.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "undici": "^8.3.0"
   },
   "engines": {
     "node": ">=18.0.0"

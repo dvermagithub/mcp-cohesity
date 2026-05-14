@@ -20,6 +20,9 @@ import { registerRunActionTools } from "./tools/run-actions.js";
 import { registerUserTools } from "./tools/users.js";
 import { registerRoleTools } from "./tools/roles.js";
 import { registerActiveDirectoryTools } from "./tools/active-directory.js";
+import { registerAntivirusTools } from "./tools/antivirus.js";
+import { registerKmsTools } from "./tools/kms.js";
+import { registerCloneTools } from "./tools/clones.js";
 import { registerRecoveryTools } from "./tools/recovery.js";
 import { registerAlertsTools } from "./tools/alerts.js";
 import { registerStorageTools } from "./tools/storage.js";
@@ -72,6 +75,9 @@ function wireTools(server: McpServer, client: CohesityClient): void {
     registerUserTools,
     registerRoleTools,
     registerActiveDirectoryTools,
+    registerAntivirusTools,
+    registerKmsTools,
+    registerCloneTools,
   ];
 
   for (const register of registrations) {

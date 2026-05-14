@@ -1,0 +1,430 @@
+[
+  {
+    "name": "get_cluster_info",
+    "description": "Get Cohesity cluster information including name, ID, software version, and node count"
+  },
+  {
+    "name": "get_cluster_stats",
+    "description": "Get Cohesity cluster storage statistics including total capacity, used and available bytes, and data protection usage"
+  },
+  {
+    "name": "list_protection_policies",
+    "description": "List all Cohesity data protection policies including schedule, retention, and replication settings"
+  },
+  {
+    "name": "create_protection_policy",
+    "description": "Create a new Cohesity protection policy. Supports:\n- Basic: incremental-only with retention (e.g. daily incremental, keep 30 days)\n- GFS (Grandfather-Father-Son): incremental + weekly full + extended retention tiers (weekly/monthly/yearly). GFS requires full_schedule_day_of_week and at least one of gfs_weekly_retention/gfs_monthly_retention/gfs_yearly_retention.\n- DataLock: WORM protection that prevents snapshot deletion. When enabled, applies to all retention tiers automatically.\n- Retry options and description also supported."
+  },
+  {
+    "name": "update_protection_policy",
+    "description": "Update an existing Cohesity protection policy. Fetches the current policy and applies changes. Use list_protection_policies to get the policy ID."
+  },
+  {
+    "name": "delete_protection_policy",
+    "description": "Delete a Cohesity protection policy. The policy must not be in use by any protection groups."
+  },
+  {
+    "name": "list_protection_groups",
+    "description": "List Cohesity protection groups (backup jobs) with status, schedule, and last run information"
+  },
+  {
+    "name": "get_protection_group",
+    "description": "Get detailed information about a specific Cohesity protection group including configuration, schedule, and last run status"
+  },
+  {
+    "name": "create_protection_group",
+    "description": "Create a new Cohesity protection group (backup job). For VMware, provide vm_ids to protect specific VMs. Requires a policy ID and storage domain ID."
+  },
+  {
+    "name": "update_protection_group",
+    "description": "Update a Cohesity VMware protection group to add or remove VMs. Fetches the current group state, applies the changes, and saves. Use search_objects to find VM IDs first."
+  },
+  {
+    "name": "delete_protection_group",
+    "description": "Delete a Cohesity protection group. Optionally delete all associated snapshots."
+  },
+  {
+    "name": "pause_protection_group",
+    "description": "Pause a Cohesity protection group so it stops running scheduled backups"
+  },
+  {
+    "name": "resume_protection_group",
+    "description": "Resume a paused Cohesity protection group so it resumes scheduled backups"
+  },
+  {
+    "name": "run_protection_group",
+    "description": "Trigger an on-demand backup run for a Cohesity protection group"
+  },
+  {
+    "name": "list_protection_runs",
+    "description": "List recent backup runs for a Cohesity protection group with status, duration, and data size"
+  },
+  {
+    "name": "get_protection_run",
+    "description": "Get detailed information about a specific Cohesity backup run including per-object status and statistics"
+  },
+  {
+    "name": "list_sources",
+    "description": "List all registered Cohesity protection sources such as vSphere, Physical servers, NAS, SQL, and more"
+  },
+  {
+    "name": "search_objects",
+    "description": "Search for Cohesity protectable objects (VMs, physical servers, databases, etc.) by name or environment. The object ID used for protection groups is found in objectProtectionInfos[0].objectId in the response. For a full list of all VMware objects with IDs, use list_sources then get_source."
+  },
+  {
+    "name": "get_source",
+    "description": "Get detailed information about a specific Cohesity protection source including its object hierarchy"
+  },
+  {
+    "name": "refresh_source",
+    "description": "Refresh a registered protection source to sync the latest inventory from it. For vCenter, this re-discovers VMs, datastores, hosts, and clusters. Use list_sources to get the source ID."
+  },
+  {
+    "name": "register_vmware_source",
+    "description": "Register a VMware vCenter, ESXi standalone host, or vCloud Director endpoint as a backup source"
+  },
+  {
+    "name": "register_physical_source",
+    "description": "Register a physical server (Linux, Windows, AIX, Solaris, SAP HANA) as a backup source. Requires the Cohesity agent to be installed and reachable on the host."
+  },
+  {
+    "name": "register_azure_source",
+    "description": "Register an Azure tenant or subscription as a backup source for protecting Azure VMs, SQL, Files, Blob, and other workloads"
+  },
+  {
+    "name": "register_aws_source",
+    "description": "Register an AWS account as a backup source for protecting EC2, RDS, S3, DynamoDB, and other AWS workloads"
+  },
+  {
+    "name": "register_m365_source",
+    "description": "Register a Microsoft 365 tenant as a backup source for protecting Exchange Online, OneDrive, SharePoint, Teams, and Groups"
+  },
+  {
+    "name": "register_nas_source",
+    "description": "Register a generic NAS mount point (NFS3, NFS4.1, or SMB/CIFS) as a backup source"
+  },
+  {
+    "name": "update_source_registration",
+    "description": "Update an existing source registration (rotate credentials, change endpoint, etc.). For VMware vCenter only — for other env types, use the raw API."
+  },
+  {
+    "name": "unregister_source",
+    "description": "Unregister (delete) a source registration. WARNING: removes the source from Cohesity but does not delete existing backups."
+  },
+  {
+    "name": "list_recovery_tasks",
+    "description": "List Cohesity recovery tasks with status, type, and progress information"
+  },
+  {
+    "name": "get_recovery_task",
+    "description": "Get detailed information about a specific Cohesity recovery task including per-object restore status"
+  },
+  {
+    "name": "list_alerts",
+    "description": "List Cohesity cluster alerts with severity, description, and resolution status"
+  },
+  {
+    "name": "resolve_alert",
+    "description": "Mark a Cohesity alert as resolved"
+  },
+  {
+    "name": "list_storage_domains",
+    "description": "List Cohesity storage domains (view boxes) where backups are stored. The storage domain ID is required when creating protection groups."
+  },
+  {
+    "name": "list_objects",
+    "description": "List protectable objects under a registered source (e.g., all VMs under a vCenter). Returns objects with direct 'id' fields suitable for use in protection groups. Requires a parentId (source or container ID from list_sources)."
+  },
+  {
+    "name": "list_snapshots",
+    "description": "List available backup snapshots for a specific object (VM, database, etc.). Use the object ID from search_objects (objectProtectionInfos[0].objectId) or list_objects. Snapshot IDs are required for recovery operations."
+  },
+  {
+    "name": "browse_snapshot_files",
+    "description": "Browse files and folders in a VM snapshot using Cohesity's indexed file search. Returns immediate children of the specified path. Requires indexing to be enabled on the protection group. Use object_id from search_objects (objectProtectionInfos[0].objectId). If indexing is not enabled, enable it via update_protection_group first."
+  },
+  {
+    "name": "recover_vm",
+    "description": "Recover a VMware VM from a Cohesity snapshot. By default restores to the original location (overwrite). Use list_snapshots to find the snapshot ID. For in-place recovery, only snapshot_id and name are required."
+  },
+  {
+    "name": "search_files",
+    "description": "Search for files and folders across Cohesity snapshots by name. Returns matching files with their paths, source VM, and snapshot info. NOTE: Cohesity prefixes VMware file paths with a volume label (e.g. 'lvol_2/home/user/file') — pass these paths as-is to recover_files, which will automatically strip the prefix when restoring to the original location."
+  },
+  {
+    "name": "recover_files",
+    "description": "Recover specific files or folders from a VMware VM snapshot back to the original VM. Use list_snapshots to get a snapshot ID and search_files to find file paths. Pass file paths exactly as returned by search_files (e.g. 'lvol_2/home/user/file') — the volume prefix is automatically stripped when restoring to original path. The recover_method 'UseExistingAgent' requires a Cohesity agent installed on the VM; 'UseHypervisorApis' uses VMware Tools (requires VM credentials)."
+  },
+  {
+    "name": "get_protection_heatmap",
+    "description": "Generate a Protected Objects Heatmap report showing per-VM/object backup status for each day in a date range — matching the Cohesity GUI Reports > Protected Objects Heatmap view. Returns a summary (total runs, success, failed, canceled) and a per-object daily grid with run details (protection group, start time, duration, logical size, data read, status)."
+  },
+  {
+    "name": "get_protection_summary",
+    "description": "Generate a protection job summary report showing overall backup health: success/failure counts, SLA violations, and a list of failing protection groups with their last run status. Good for daily operational review."
+  },
+  {
+    "name": "get_recovery_summary",
+    "description": "Generate a recovery activity summary showing how many objects were recovered, recovery task statuses, and recent recovery operations in a time window."
+  },
+  {
+    "name": "list_external_targets",
+    "description": "List all registered external targets (cloud vaults, tape, NAS) used for archival and tiering. Returns target IDs needed for protection policy archival configuration."
+  },
+  {
+    "name": "get_external_target",
+    "description": "Get details of a specific external target by ID."
+  },
+  {
+    "name": "create_external_target_aws",
+    "description": "Register a new AWS S3 external target for archival or tiering. Requires an existing IAM role or access key credentials."
+  },
+  {
+    "name": "create_external_target_azure",
+    "description": "Register a new Azure Blob Storage external target for archival or tiering."
+  },
+  {
+    "name": "delete_external_target",
+    "description": "Delete a registered external target. Use force_delete=true only if the target has no active archival jobs."
+  },
+  {
+    "name": "list_tiering_tasks",
+    "description": "List all data tiering tasks that move cold data from primary storage to external targets (cloud, vault). Shows status, schedule, and source/target configuration."
+  },
+  {
+    "name": "get_tiering_task",
+    "description": "Get details of a specific data tiering task by ID."
+  },
+  {
+    "name": "create_tiering_task",
+    "description": "Create a data tiering task to automatically move cold data from a NAS/View source to an external target. Requires a registered external target (use list_external_targets to find IDs)."
+  },
+  {
+    "name": "run_tiering_task",
+    "description": "Trigger an on-demand run of a data tiering task."
+  },
+  {
+    "name": "update_tiering_task_state",
+    "description": "Pause or resume one or more data tiering tasks."
+  },
+  {
+    "name": "delete_tiering_task",
+    "description": "Delete a data tiering task."
+  },
+  {
+    "name": "list_notification_rules",
+    "description": "List all alert notification rules. Each rule defines which alert categories/severities trigger email, SNMP, syslog, or webhook notifications."
+  },
+  {
+    "name": "create_notification_rule",
+    "description": "Create an alert notification rule to send emails or webhooks when specific alert categories or severities occur."
+  },
+  {
+    "name": "update_notification_rule",
+    "description": "Update an existing alert notification rule by ID."
+  },
+  {
+    "name": "delete_notification_rule",
+    "description": "Delete an alert notification rule by ID."
+  },
+  {
+    "name": "get_cluster_storage_stats",
+    "description": "Get current cluster storage statistics including total capacity, used space, data reduction ratios, and storage breakdown by category. Useful for capacity planning."
+  },
+  {
+    "name": "get_workload_stats",
+    "description": "Get high-level workload statistics showing data volumes and counts per workload type (VMware, Physical, NAS, SQL, etc.) on the cluster."
+  },
+  {
+    "name": "get_replication_backlog",
+    "description": "Get replication backlog statistics showing how much data is pending replication to remote clusters. Useful for monitoring replication health."
+  },
+  {
+    "name": "get_replication_clusters",
+    "description": "Get list of remote replication clusters with total data replicated to/from each. Shows replication partner health at a glance."
+  },
+  {
+    "name": "get_replication_data_trend",
+    "description": "Get replication data transfer trends over a time range. Returns time-series data showing how much data was replicated at each interval. Useful for capacity planning and SLA reporting."
+  },
+  {
+    "name": "get_replication_objects",
+    "description": "List all objects that have been replicated to remote clusters in the given time range, with per-object replication status and data size."
+  },
+  {
+    "name": "list_audit_logs",
+    "description": "Query the cluster audit log. Filter by user, action, entity type, time window, or free-text search. Returns who-did-what-when records for compliance and forensics."
+  },
+  {
+    "name": "list_audit_log_actions",
+    "description": "List all action types recognized by the audit log (for building filters)"
+  },
+  {
+    "name": "list_audit_log_entity_types",
+    "description": "List all entity types tracked in the audit log (for building filters)"
+  },
+  {
+    "name": "get_protected_objects_trend_report",
+    "description": "Get a per-object backup success/failure trend report over a time window. Returns each protected object with daily or weekly rollups of total, successful, running, cancelled, and failed runs."
+  },
+  {
+    "name": "get_sources_jobs_summary_report",
+    "description": "Get a report mapping protection sources to the protection groups (jobs) covering them, with run counts per source."
+  },
+  {
+    "name": "get_archival_transfer_report",
+    "description": "Get a report of data transferred to external archival targets (vaults) in a given time window."
+  },
+  {
+    "name": "generate_protection_summary_report",
+    "description": "Generate a synthesized Markdown protection summary report: protection groups, their last run status, and any active alerts. Combines multiple V2 endpoints into one human-readable view."
+  },
+  {
+    "name": "generate_failed_backups_report",
+    "description": "Generate a Markdown report listing protection groups whose most recent run failed, was missed, or finished with warnings. Useful for daily backup health triage."
+  },
+  {
+    "name": "generate_capacity_report",
+    "description": "Generate a Markdown capacity report showing cluster storage usage, available capacity, deduplication ratio, and data reduction stats."
+  },
+  {
+    "name": "cancel_protection_run",
+    "description": "Cancel a running protection group run. Can cancel the entire run or a subset of objects/copies (local snapshot, archival, replication). Already-completed object tasks are not cancelled."
+  },
+  {
+    "name": "cancel_recovery_task",
+    "description": "Cancel an in-flight recovery task by its ID. Returns 204 No Content on success."
+  },
+  {
+    "name": "set_snapshot_datalock",
+    "description": "Apply DataLock (WORM) protection to a protection group run's local snapshot. Once locked, the snapshot cannot be deleted until its retention expires. Compliance lock is even more restrictive — it cannot be released by an administrator."
+  },
+  {
+    "name": "set_snapshot_legal_hold",
+    "description": "Place a snapshot on legal hold (or release it). While on hold, the snapshot cannot be deleted regardless of retention policy. Requires Data Security Role."
+  },
+  {
+    "name": "extend_snapshot_retention",
+    "description": "Extend or shorten a snapshot's retention. Positive days_delta extends, negative shortens. If the resulting expiry falls before now, the snapshot is deleted immediately."
+  },
+  {
+    "name": "delete_snapshot",
+    "description": "Delete a protection group run's local snapshot immediately. WARNING: irreversible. Will fail if the snapshot is under DataLock or Legal Hold."
+  },
+  {
+    "name": "list_users",
+    "description": "List Cohesity users. Filterable by domain, sid, username (partial or exact), email, or role."
+  },
+  {
+    "name": "get_user",
+    "description": "Get a single Cohesity user by SID"
+  },
+  {
+    "name": "create_local_user",
+    "description": "Create a new LOCAL Cohesity user with a password. For AD/IdP users, use create_ad_user."
+  },
+  {
+    "name": "create_ad_user",
+    "description": "Create a Cohesity user mapped to an existing Active Directory or IdP principal. No password is set on Cohesity — auth flows through the identity provider."
+  },
+  {
+    "name": "update_user",
+    "description": "Update a Cohesity user — roles, description, restricted flag, or LOCAL user password."
+  },
+  {
+    "name": "delete_users",
+    "description": "Delete one or more Cohesity users by SID. AD/IdP principal accounts are NOT deleted — only the Cohesity-side mapping."
+  },
+  {
+    "name": "list_roles",
+    "description": "List Cohesity roles (both built-in and user-created). Each role bundles a set of privileges."
+  },
+  {
+    "name": "create_role",
+    "description": "Create a custom Cohesity role with a specific set of privileges. Privilege names are the same strings shown in the cluster's Role configuration UI (e.g., PROTECTION_VIEW, PROTECTION_MODIFY, CLUSTER_VIEW)."
+  },
+  {
+    "name": "update_role",
+    "description": "Update a Cohesity role's privileges and/or description. The full privilege list must be supplied (this is a replace, not a merge)."
+  },
+  {
+    "name": "delete_role",
+    "description": "Delete a Cohesity role by name. Built-in roles cannot be deleted."
+  },
+  {
+    "name": "list_active_directories",
+    "description": "List Active Directory domains joined to the Cohesity cluster"
+  },
+  {
+    "name": "join_active_directory",
+    "description": "Join the cluster to an Active Directory domain using admin credentials with rights to add a computer to the domain."
+  },
+  {
+    "name": "leave_active_directory",
+    "description": "Remove an Active Directory from the Cohesity cluster"
+  },
+  {
+    "name": "list_antivirus_groups",
+    "description": "List antivirus service groups configured on the cluster. Each group bundles one or more ICAP-compliant antivirus servers."
+  },
+  {
+    "name": "create_antivirus_group",
+    "description": "Create a new antivirus service group. Bundles one or more ICAP servers so the cluster can route on-access scans to them."
+  },
+  {
+    "name": "get_antivirus_group",
+    "description": "Get a single antivirus service group by ID"
+  },
+  {
+    "name": "update_antivirus_group",
+    "description": "Update an antivirus service group's name, services, or state"
+  },
+  {
+    "name": "delete_antivirus_group",
+    "description": "Delete an antivirus service group"
+  },
+  {
+    "name": "check_icap_connection",
+    "description": "Probe an ICAP antivirus URI and return its current reachability status"
+  },
+  {
+    "name": "list_infected_files",
+    "description": "List files that an antivirus service has flagged as infected on cluster Views. Filter by view, time range, or quarantine state."
+  },
+  {
+    "name": "list_kms_configurations",
+    "description": "List Key Management Systems (KMS) configured on the cluster. The InternalKms is always present; external types include AwsKms, KmipKms, IbmKms, and GcpKms."
+  },
+  {
+    "name": "add_aws_kms",
+    "description": "Register an AWS KMS as an encryption key source. Used to encrypt storage domains or external targets."
+  },
+  {
+    "name": "add_kmip_kms",
+    "description": "Register a KMIP-compliant KMS (e.g., Thales, Fortanix). Provide endpoint, port, CA cert, and client certs."
+  },
+  {
+    "name": "update_kms",
+    "description": "Update an existing KMS configuration — assign additional storage domains or external targets, or rename it. Provider credentials cannot be changed via this method; delete and re-add to rotate credentials."
+  },
+  {
+    "name": "delete_kms",
+    "description": "Delete a KMS configuration. The internal KMS (id 0) cannot be deleted."
+  },
+  {
+    "name": "get_external_target_encryption_key",
+    "description": "Get the encryption key associated with an external target (e.g., AWS S3 bucket, Azure container). Used to verify which KMS is providing keys for archived data."
+  },
+  {
+    "name": "list_clone_tasks",
+    "description": "List active and historical clone tasks (CloneVMs, CloneView, CloneAppView). Use filters to narrow by status or time range."
+  },
+  {
+    "name": "clone_view",
+    "description": "Clone a file-services View into a new View. The clone is space-efficient (snapshot-backed). Useful for spinning up read/write test copies of production data."
+  },
+  {
+    "name": "delete_clone_task",
+    "description": "Delete a restore clone task by ID. This tears down the clone and releases its space."
+  }
+]

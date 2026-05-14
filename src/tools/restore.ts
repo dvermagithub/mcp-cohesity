@@ -247,44 +247,6 @@ export function registerRestoreTools(
     },
   );
 
-  // ── Cancel Protection Run ────────────────────────────────────────────
-  server.tool(
-    "cancel_protection_run",
-    "Cancel one or more in-progress backup runs for a Cohesity protection group. Use list_protection_runs to find run IDs with status 'Running' or 'Accepted'.",
-    {
-      protection_group_id: z
-        .string()
-        .describe("Protection group ID"),
-      run_ids: z
-        .array(z.string())
-        .describe("List of run IDs to cancel (from list_protection_runs)"),
-      local_task_id: z
-        .string()
-        .optional()
-        .describe("Cancel a specific local backup task within a run"),
-    },
-    async ({ protection_group_id, run_ids, local_task_id }) => {
-      try {
-        const cancelRuns = run_ids.map((runId) => {
-          const entry: Record<string, unknown> = { runId };
-          if (local_task_id) entry.localTaskId = local_task_id;
-          return entry;
-        });
-
-        const body = { cancelRuns };
-
-        const result = await client.postV2(
-          `data-protect/protection-groups/${protection_group_id}/runs/cancel`,
-          body,
-        );
-        return toolResult(
-          result
-            ? JSON.stringify(result, null, 2)
-            : `Cancel request submitted for ${run_ids.length} run(s).`,
-        );
-      } catch (error) {
-        return toolResult(`Error cancelling runs: ${error}`, true);
-      }
-    },
-  );
+  // cancel_protection_run lives in tools/run-actions.ts (spec-driven version);
+  // intentionally not re-registered here.
 }
