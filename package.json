@@ -1,7 +1,7 @@
 {
   "name": "mcp-cohesity",
   "version": "2.0.0",
-  "description": "MCP server for Cohesity DataProtect — 56 tools for backup, recovery, data protection, archival, tiering, and monitoring",
+  "description": "MCP server for Cohesity DataProtect — 92 tools across 20 categories for source registration, backup, recovery, retention/WORM, archival, monitoring, reporting, identity, and audit",
   "type": "module",
   "main": "dist/index.js",
   "bin": {

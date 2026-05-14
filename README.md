@@ -1,146 +1,261 @@
 # mcp-cohesity
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for **Cohesity DataProtect**, providing AI assistants with full access to backup management, recovery operations, data protection monitoring, and infrastructure management through the Cohesity REST API.
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for **Cohesity DataProtect**, providing AI assistants with deep coverage of Cohesity's REST API: registration, backup, recovery, retention/WORM, archival, monitoring, reporting, identity, and audit.
 
-> Inspired by [fredriksknese/mcp-cohesity](https://github.com/fredriksknese/mcp-cohesity). Entirely rewritten from scratch with 56 tools across 12 categories.
+> Inspired by [fredriksknese/mcp-cohesity](https://github.com/fredriksknese/mcp-cohesity). Entirely rewritten from scratch.
 
-## Features
+**92 tools across 20 categories**, every tool driven by the cluster's OpenAPI v2 spec and live-validated against a real cluster.
 
-**56 tools** across twelve categories:
+---
 
-### Cluster (3 tools)
+## Quick Tool Index
+
+| Category | Tools |
+|---|---|
+| [Cluster](#cluster-2-tools) | 2 |
+| [Source Registration](#source-registration-8-tools) | 8 |
+| [Protection Sources](#protection-sources-4-tools) | 4 |
+| [Protection Policies](#protection-policies-4-tools) | 4 |
+| [Protection Groups](#protection-groups-8-tools) | 8 |
+| [Backup Runs](#backup-runs-2-tools) | 2 |
+| [Run Actions & Snapshot Management](#run-actions--snapshot-management-6-tools) | 6 |
+| [Storage & Objects](#storage--objects-4-tools) | 4 |
+| [Recovery & File Restore](#recovery--file-restore-6-tools) | 6 |
+| [Alerts](#alerts-2-tools) | 2 |
+| [Alert Notification Rules](#alert-notification-rules-4-tools) | 4 |
+| [External Targets](#external-targets-5-tools) | 5 |
+| [Data Tiering](#data-tiering-6-tools) | 6 |
+| [Reports](#reports-3-tools) | 3 |
+| [Cluster-Local Reports](#cluster-local-reports-6-tools) | 6 |
+| [Stats](#stats-6-tools) | 6 |
+| [Audit Logs](#audit-logs-3-tools) | 3 |
+| [Users](#users-6-tools) | 6 |
+| [Roles](#roles-4-tools) | 4 |
+| [Active Directory](#active-directory-3-tools) | 3 |
+
+---
+
+## Tool Reference
+
+### Cluster (2 tools)
 
 | Tool | Description |
-|------|-------------|
-| `get_cluster_info` | Get cluster name, ID, software version, and node count |
-| `get_cluster_stats` | Get storage capacity (used/total) and throughput statistics |
-| `get_cluster_storage_stats` | Get detailed storage breakdown including data reduction ratios and capacity planning metrics |
+|---|---|
+| `get_cluster_info` | Cluster name, ID, software version, node count |
+| `get_cluster_stats` | Storage capacity and throughput statistics |
 
-### Protection Policies (4 tools)
+### Source Registration (8 tools)
 
-| Tool | Description |
-|------|-------------|
-| `list_protection_policies` | List all data protection policies with schedule and retention settings |
-| `create_protection_policy` | Create a new policy with incremental/full schedules, GFS retention, and DataLock (WORM) support |
-| `update_protection_policy` | Update an existing protection policy |
-| `delete_protection_policy` | Delete a protection policy |
-
-### Protection Groups (8 tools)
+Register new backup sources end-to-end — every shape verified against the cluster's `SourceRegistrationRequestParams` schema.
 
 | Tool | Description |
-|------|-------------|
-| `list_protection_groups` | List protection groups (backup jobs) with status and schedule |
-| `get_protection_group` | Get detailed configuration of a specific protection group |
-| `create_protection_group` | Create a new protection group for VMware, Physical, SQL, etc. |
-| `update_protection_group` | Update a protection group (add/remove VMs, change policy, enable indexing) |
-| `delete_protection_group` | Delete a protection group and optionally its snapshots |
-| `run_protection_group` | Trigger an on-demand backup run |
-| `pause_protection_group` | Pause scheduled backups for a protection group |
-| `resume_protection_group` | Resume a paused protection group |
-
-### Backup Runs (3 tools)
-
-| Tool | Description |
-|------|-------------|
-| `list_protection_runs` | List recent backup runs with status, duration, and data size |
-| `get_protection_run` | Get detailed information about a specific backup run |
-| `cancel_protection_run` | Cancel a running backup |
+|---|---|
+| `register_vmware_source` | Register a vCenter, ESXi standalone host, or vCloud Director endpoint |
+| `register_physical_source` | Register a physical Linux / Windows / AIX / Solaris / SAP HANA server |
+| `register_azure_source` | Register an Azure tenant or subscription (VM, SQL, Files, Blob, etc.) |
+| `register_aws_source` | Register an AWS account (EC2, RDS, S3, DynamoDB, etc.) |
+| `register_m365_source` | Register a Microsoft 365 tenant (Exchange, OneDrive, SharePoint, Teams, Groups) |
+| `register_nas_source` | Register a generic NAS mount (NFS3, NFS4.1, SMB/CIFS) |
+| `update_source_registration` | Rotate credentials or change endpoint on an existing registration |
+| `unregister_source` | Delete a source registration (does not delete backups) |
 
 ### Protection Sources (4 tools)
 
 | Tool | Description |
-|------|-------------|
-| `list_sources` | List all registered sources (vSphere, Physical, NAS, SQL, etc.) |
-| `get_source` | Get full object hierarchy details for a specific source |
-| `search_objects` | Search for protectable objects (VMs, databases) across all sources |
-| `refresh_source` | Refresh a registered source to sync latest inventory (e.g. re-discover VMs from vCenter) |
+|---|---|
+| `list_sources` | List all registered sources |
+| `get_source` | Get full object hierarchy details for a source |
+| `search_objects` | Search for protectable objects across all sources (auto-refreshes first) |
+| `refresh_source` | Re-discover inventory from a registered source (e.g. vCenter) |
+
+### Protection Policies (4 tools)
+
+| Tool | Description |
+|---|---|
+| `list_protection_policies` | List all data protection policies |
+| `create_protection_policy` | Create a policy with incremental/full schedules, GFS retention, DataLock |
+| `update_protection_policy` | Update an existing policy |
+| `delete_protection_policy` | Delete a policy |
+
+### Protection Groups (8 tools)
+
+| Tool | Description |
+|---|---|
+| `list_protection_groups` | List protection groups (backup jobs) with status and schedule |
+| `get_protection_group` | Get detailed configuration of a specific group |
+| `create_protection_group` | Create a new protection group for VMware, Physical, SQL, etc. |
+| `update_protection_group` | Update a group (add/remove VMs, change policy, enable indexing) |
+| `delete_protection_group` | Delete a group and optionally its snapshots |
+| `run_protection_group` | Trigger an on-demand backup run |
+| `pause_protection_group` | Pause scheduled backups |
+| `resume_protection_group` | Resume a paused group |
+
+### Backup Runs (2 tools)
+
+| Tool | Description |
+|---|---|
+| `list_protection_runs` | List recent backup runs with status, duration, and data size |
+| `get_protection_run` | Get detailed information about a specific run |
+
+### Run Actions & Snapshot Management (6 tools)
+
+WORM, legal hold, retention adjustments, and run cancellation.
+
+| Tool | Description |
+|---|---|
+| `cancel_protection_run` | Cancel a running protection group run (whole or per-object/copy) |
+| `cancel_recovery_task` | Cancel an in-flight recovery task |
+| `set_snapshot_datalock` | Apply DataLock (Compliance or Administrative WORM) to a snapshot |
+| `set_snapshot_legal_hold` | Place a snapshot on legal hold or release it (requires Data Security Role) |
+| `extend_snapshot_retention` | Extend or shorten a snapshot's retention by N days |
+| `delete_snapshot` | Delete a snapshot immediately (irreversible, blocked by DataLock/Legal Hold) |
 
 ### Storage & Objects (4 tools)
 
 | Tool | Description |
-|------|-------------|
-| `list_storage_domains` | List storage domains (view boxes) where backups are stored |
-| `list_objects` | List protectable objects under a registered source |
-| `list_snapshots` | List available backup snapshots for a specific object |
-| `browse_snapshot_files` | Browse files and folders inside a VM snapshot using indexed search |
+|---|---|
+| `list_storage_domains` | List storage domains (view boxes) |
+| `list_objects` | List protectable objects under a source |
+| `list_snapshots` | List available snapshots for an object |
+| `browse_snapshot_files` | Browse files inside a VM snapshot via V2 indexed search |
 
-### Recovery & File Restore (5 tools)
+### Recovery & File Restore (6 tools)
 
 | Tool | Description |
-|------|-------------|
-| `list_recovery_tasks` | List recovery tasks with status and type |
-| `get_recovery_task` | Get detailed information about a specific recovery task |
+|---|---|
+| `list_recovery_tasks` | List recovery tasks with status |
+| `get_recovery_task` | Get detailed info about a recovery task |
 | `recover_vm` | Recover a VM from a snapshot (instant recovery or full clone) |
-| `search_files` | Search for files across all indexed backups by name pattern |
-| `recover_files` | Recover specific files from a snapshot to original or alternate location |
+| `search_files` | Search for files across all indexed backups |
+| `recover_files` | Recover specific files to original or alternate location (LVM-aware) |
+| `cancel_recovery_task` | *(see Run Actions above)* |
 
 ### Alerts (2 tools)
 
 | Tool | Description |
-|------|-------------|
-| `list_alerts` | List cluster alerts filtered by severity, category, and state |
+|---|---|
+| `list_alerts` | List alerts filtered by severity, category, state |
 | `resolve_alert` | Mark an alert as resolved with resolution notes |
 
-### Alert Notifications (4 tools)
+### Alert Notification Rules (4 tools)
 
 | Tool | Description |
-|------|-------------|
+|---|---|
 | `list_notification_rules` | List all alert notification rules |
-| `create_notification_rule` | Create a rule to send email, webhook, SNMP, or syslog alerts on specific categories/severities |
-| `update_notification_rule` | Update an existing notification rule |
+| `create_notification_rule` | Create an email / webhook / SNMP / syslog rule |
+| `update_notification_rule` | Update a notification rule |
 | `delete_notification_rule` | Delete a notification rule |
 
 ### External Targets (5 tools)
 
 | Tool | Description |
-|------|-------------|
-| `list_external_targets` | List registered external targets (AWS S3, Azure Blob, NAS, tape) for archival/tiering |
-| `get_external_target` | Get details of a specific external target |
-| `create_external_target_aws` | Register a new AWS S3 external target |
-| `create_external_target_azure` | Register a new Azure Blob Storage external target |
+|---|---|
+| `list_external_targets` | List registered external targets (S3, Azure Blob, NAS, tape) |
+| `get_external_target` | Get details of a specific target |
+| `create_external_target_aws` | Register an AWS S3 external target |
+| `create_external_target_azure` | Register an Azure Blob Storage external target |
 | `delete_external_target` | Delete an external target |
 
 ### Data Tiering (6 tools)
 
 | Tool | Description |
-|------|-------------|
+|---|---|
 | `list_tiering_tasks` | List all data tiering tasks |
-| `get_tiering_task` | Get details of a specific tiering task |
-| `create_tiering_task` | Create a task to automatically move cold data to an external target |
+| `get_tiering_task` | Get details of a tiering task |
+| `create_tiering_task` | Create a task to move cold data to external target |
 | `run_tiering_task` | Trigger an on-demand tiering run |
-| `update_tiering_task_state` | Pause or resume tiering tasks |
+| `update_tiering_task_state` | Pause or resume a tiering task |
 | `delete_tiering_task` | Delete a tiering task |
 
-### Reports & Stats (6 tools)
+### Reports (3 tools)
+
+V2 protection summary reports.
 
 | Tool | Description |
-|------|-------------|
-| `get_protection_heatmap` | Get a per-VM per-day protection status grid (matches the Cohesity GUI heatmap) |
-| `get_protection_summary` | Get overall protection run statistics and success/failure counts |
-| `get_recovery_summary` | Get recovery task statistics for a time range |
-| `get_workload_stats` | Get data volumes and counts per workload type (VMware, Physical, NAS, SQL, etc.) |
-| `get_replication_backlog` | Get replication backlog stats showing pending data to remote clusters |
-| `get_replication_clusters` | List remote replication partner clusters with total data replicated |
+|---|---|
+| `get_protection_heatmap` | Per-VM per-day protection status grid (matches GUI heatmap) |
+| `get_protection_summary` | Overall protection run statistics |
+| `get_recovery_summary` | Recovery task statistics for a time range |
 
-### Replication Trends (2 tools)
+### Cluster-Local Reports (6 tools)
+
+Reports derived from V1 cluster-local endpoints plus synthesized Markdown reports — **no Helios required**.
 
 | Tool | Description |
-|------|-------------|
-| `get_replication_data_trend` | Get time-series replication throughput data for capacity planning |
-| `get_replication_objects` | List all objects replicated to/from remote clusters in a time range |
+|---|---|
+| `get_protected_objects_trend_report` | Per-object backup success/failure trends with daily/weekly rollups |
+| `get_sources_jobs_summary_report` | Sources × jobs matrix |
+| `get_archival_transfer_report` | Data transferred to external archival targets |
+| `generate_protection_summary_report` | Synthesized Markdown report of protection groups + active alerts |
+| `generate_failed_backups_report` | Markdown list of protection groups whose last run failed/missed |
+| `generate_capacity_report` | Markdown capacity report (cluster storage, dedup, data reduction) |
 
-## Key Enhancements Over Upstream
+### Stats (6 tools)
 
-- **Auto source refresh** — CRUD operations (create/update/delete groups, search objects) automatically refresh all registered sources before executing, ensuring the latest inventory from vCenter/Hyper-V
-- **LVM volume path handling** — File restore to original paths on LVM-based Linux VMs works correctly by automatically using the `alternatePath` workaround for Cohesity's volume prefix (`lvol_N/`) limitation
-- **GFS + DataLock policy creation** — Full support for Grandfather-Father-Son extended retention with weekly/monthly/yearly tiers and WORM DataLock protection
-- **Indexed file browsing** — `browse_snapshot_files` uses the V2 search API with smart path-based search term derivation (requires indexing enabled on the protection group)
+| Tool | Description |
+|---|---|
+| `get_cluster_storage_stats` | Detailed storage breakdown including data reduction ratios |
+| `get_workload_stats` | Data volumes and counts per workload (VMware, Physical, NAS, SQL) |
+| `get_replication_backlog` | Pending replication data to remote clusters |
+| `get_replication_clusters` | List replication partner clusters with total replicated |
+| `get_replication_data_trend` | Time-series replication throughput |
+| `get_replication_objects` | Objects replicated to/from remote clusters in a time range |
+
+### Audit Logs (3 tools)
+
+| Tool | Description |
+|---|---|
+| `list_audit_logs` | Query the cluster audit log (users, actions, entity types, time window, search) |
+| `list_audit_log_actions` | List all action types recognized by the audit log |
+| `list_audit_log_entity_types` | List all entity types tracked in the audit log |
+
+### Users (6 tools)
+
+| Tool | Description |
+|---|---|
+| `list_users` | List Cohesity users (filter by domain, sid, username, email, role) |
+| `get_user` | Get a single user by SID |
+| `create_local_user` | Create a LOCAL Cohesity user with a password |
+| `create_ad_user` | Map an existing AD / IdP principal as a Cohesity user |
+| `update_user` | Update user roles, description, password, or restricted flag |
+| `delete_users` | Delete one or more users by SID |
+
+### Roles (4 tools)
+
+| Tool | Description |
+|---|---|
+| `list_roles` | List built-in and custom Cohesity roles |
+| `create_role` | Create a custom role with a privilege set |
+| `update_role` | Update a role's privileges (replace, not merge) |
+| `delete_role` | Delete a custom role (built-in roles cannot be deleted) |
+
+### Active Directory (3 tools)
+
+| Tool | Description |
+|---|---|
+| `list_active_directories` | List AD domains joined to the cluster |
+| `join_active_directory` | Join the cluster to an AD domain |
+| `leave_active_directory` | Remove an AD from the cluster |
+
+---
+
+## Key Engineering Notes
+
+- **Spec-driven** — every tool's request/response shape is modeled directly from the cluster's OpenAPI v2 spec (`SourceRegistrationRequestParams`, `AuditLog`, `UpdateLocalSnapshotConfig`, etc.), not guessed.
+- **Live-validated** — write tools were probed against a real cluster to confirm the cluster accepts the payload shape before shipping.
+- **Auto source refresh** — all CRUD operations (create/update/delete groups, search objects, register source) automatically refresh registered sources so the cluster sees current inventory.
+- **LVM volume path handling** — `recover_files` to original path on LVM-based Linux VMs works correctly by transparently using `alternatePath` to handle Cohesity's `lvol_N/` prefix.
+- **Indexed file browsing** — `browse_snapshot_files` uses V2 `search/indexed-objects` with `objectIds` scoping to a single VM, and auto-derives search terms from the last path segment (requires indexing enabled on the protection group).
+- **GFS + DataLock policies** — full support for Grandfather-Father-Son extended retention with weekly/monthly/yearly tiers and WORM DataLock.
+- **No Helios dependency** — every report tool works on a standalone on-prem cluster; synthesized Markdown reports are composed from cluster-local V1 + V2 endpoints.
+
+---
 
 ## Installation
 
 ```bash
-git clone https://github.com/dvermagithub/CohesityMCP.git
-cd CohesityMCP
+git clone https://github.com/dvermagithub/mcp-cohesity.git
+cd mcp-cohesity
 npm install
 npm run build
 ```
@@ -150,12 +265,12 @@ npm run build
 The server is configured via environment variables:
 
 | Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `COHESITY_CLUSTER` | Yes | -- | Cohesity cluster hostname or IP address |
-| `COHESITY_USERNAME` | Yes | -- | Username for authentication |
-| `COHESITY_PASSWORD` | Yes | -- | Password for authentication |
+|---|---|---|---|
+| `COHESITY_CLUSTER` | Yes | — | Cohesity cluster hostname or IP |
+| `COHESITY_USERNAME` | Yes | — | Username for authentication |
+| `COHESITY_PASSWORD` | Yes | — | Password for authentication |
 | `COHESITY_DOMAIN` | No | `LOCAL` | Authentication domain |
-| `COHESITY_ALLOW_SELF_SIGNED` | No | `true` | Accept self-signed SSL certificates |
+| `COHESITY_ALLOW_SELF_SIGNED` | No | `true` | Accept self-signed SSL certs |
 
 ## Usage with Claude Desktop
 
@@ -166,7 +281,7 @@ Add to your `claude_desktop_config.json`:
   "mcpServers": {
     "cohesity": {
       "command": "node",
-      "args": ["/absolute/path/to/CohesityMCP/dist/index.js"],
+      "args": ["/absolute/path/to/mcp-cohesity/dist/index.js"],
       "env": {
         "COHESITY_CLUSTER": "your-cohesity-cluster.example.com",
         "COHESITY_USERNAME": "admin",
@@ -182,29 +297,34 @@ Add to your `claude_desktop_config.json`:
 ## Usage with Claude Code
 
 ```bash
-claude mcp add cohesity -- node /absolute/path/to/CohesityMCP/dist/index.js
+claude mcp add cohesity -- node /absolute/path/to/mcp-cohesity/dist/index.js
 ```
-
-Set the required environment variables before running, or configure them in your MCP settings.
 
 ## Example Prompts
 
-Once connected, you can ask your AI assistant things like:
+Day-1 setup:
 
-- *"Show me the current cluster storage utilization and capacity"*
-- *"List all protection groups that failed their last backup"*
-- *"Trigger an on-demand backup for the VM production group"*
-- *"What are the critical alerts on the cluster right now?"*
-- *"Create a protection policy with daily incremental, weekly full, and 30-day retention"*
-- *"Add deepak-vm8 to the existing protection group"*
+- *"Register the vCenter at vcsa.prod.local with admin user administrator@vsphere.local"*
+- *"Register our AWS commercial account using the IAM user with these credentials"*
+- *"Join the cluster to our corp.example.com Active Directory"*
+- *"Create a custom role called BackupOperator with PROTECTION_VIEW and PROTECTION_MODIFY privileges"*
+
+Day-2 operations:
+
+- *"Show me which protection groups failed their last backup"*
+- *"Trigger an on-demand backup for the prod-vms group"*
 - *"Browse the files in /home/zerto on deepak-vm's latest snapshot"*
-- *"Recover the file /home/zerto/script.sh from yesterday's backup to its original location"*
-- *"Show me the protection heatmap for the last 7 days"*
-- *"Create a notification rule to email admin@company.com on all critical backup failures"*
-- *"List all external archival targets and their storage classes"*
-- *"What's the replication backlog to our DR cluster?"*
-- *"Pause the nightly backup group during the maintenance window"*
-- *"Refresh the vCenter source to pick up newly created VMs"*
+- *"Recover /home/zerto/script.sh from yesterday's backup to its original location"*
+- *"What are the critical alerts on the cluster right now?"*
+- *"Cancel the recovery task that's been stuck for 30 minutes"*
+
+Day-3 governance:
+
+- *"Apply a 90-day Compliance DataLock to the most recent backup of the finance VMs"*
+- *"Place a legal hold on every snapshot of the legal-review protection group"*
+- *"Show me every Delete action in the audit log from the last 7 days"*
+- *"Generate a Markdown capacity report for our weekly ops review"*
+- *"Generate a failed-backups report for last night"*
 
 ## Development
 
@@ -218,32 +338,39 @@ npm start        # Run compiled output
 
 ```
 src/
-├── index.ts                # Entry point — creates MCP server + STDIO transport
-├── cohesity-client.ts      # HTTP client with token-based auth, V1/V2 API, auto-refresh
+├── index.ts                    # MCP server bootstrap + STDIO transport
+├── cohesity-client.ts          # HTTP client with V1/V2 auth, retry, auto-refresh
 └── tools/
-    ├── cluster.ts          # Cluster info and stats (2 tools)
-    ├── protection.ts       # Protection policies, groups, pause/resume, run (12 tools)
-    ├── runs.ts             # Backup run management (2 tools)
-    ├── sources.ts          # Protection source management + search + refresh (4 tools)
-    ├── storage.ts          # Storage domains, objects, snapshots, file browse (4 tools)
-    ├── recovery.ts         # Recovery task management (2 tools)
-    ├── restore.ts          # VM recovery, file search, file restore (5 tools)
-    ├── alerts.ts           # Alert management (2 tools)
-    ├── notifications.ts    # Alert notification rules CRUD (4 tools)
-    ├── reports.ts          # Protection heatmap, summaries (3 tools)
-    ├── stats.ts            # Cluster storage, workload, replication stats (6 tools)
-    ├── external-targets.ts # External archival targets CRUD (5 tools)
-    └── tiering.ts          # Data tiering task management (6 tools)
+    ├── cluster.ts              # Cluster info (2 tools)
+    ├── source-registration.ts  # Register/update/unregister sources (8 tools)
+    ├── sources.ts              # Source listing, search, refresh (4 tools)
+    ├── protection.ts           # Policies + groups CRUD + run/pause/resume (12 tools)
+    ├── runs.ts                 # Backup run listing (2 tools)
+    ├── run-actions.ts          # Cancel, DataLock, legal hold, retention (6 tools)
+    ├── storage.ts              # Storage domains, objects, snapshots, file browse (4 tools)
+    ├── recovery.ts             # Recovery task listing (2 tools)
+    ├── restore.ts              # VM recovery, file search, file restore (4 tools)
+    ├── alerts.ts               # Alert listing and resolution (2 tools)
+    ├── notifications.ts        # Alert notification rules (4 tools)
+    ├── external-targets.ts     # External archival targets (5 tools)
+    ├── tiering.ts              # Data tiering tasks (6 tools)
+    ├── reports.ts              # Heatmap + protection/recovery summaries (3 tools)
+    ├── cluster-reports.ts      # Cluster-local + synthesized Markdown reports (6 tools)
+    ├── stats.ts                # Storage, workload, replication stats (6 tools)
+    ├── audit-logs.ts           # Audit log queries (3 tools)
+    ├── users.ts                # User management (6 tools)
+    ├── roles.ts                # Role management (4 tools)
+    └── active-directory.ts     # AD join/leave (3 tools)
 ```
 
 ## API Details
 
 This server uses two Cohesity API versions:
 
-- **V2 API** (`/v2/`) — Used for most operations: protection groups, runs, sources, recoveries, policies, external targets, tiering, alerts, and stats
-- **V1 API** (`/irisservices/api/v1/public/`) — Used for alert listing and source hierarchy details
+- **V2 API** (`/v2/`) — Most operations: registration, protection groups, runs, sources, recoveries, policies, external targets, tiering, alerts, audit logs, users, roles, AD.
+- **V1 API** (`/irisservices/api/v1/public/`) — Cluster-local reports (`protectedObjectsTrends`, `protectionSourcesJobsSummary`, `dataTransferToVaults`) and source hierarchy details. Used because some cluster-local reports are not exposed on V2.
 
-Authentication uses the V2 access-tokens endpoint (`POST /v2/access-tokens`) with Bearer token auth. Tokens are automatically refreshed on 401 responses.
+Authentication uses `POST /v2/access-tokens` (Bearer token), with auto-refresh on 401 responses.
 
 ## Requirements
 

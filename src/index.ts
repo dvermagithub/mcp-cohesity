@@ -13,6 +13,13 @@ import { registerClusterTools } from "./tools/cluster.js";
 import { registerProtectionTools } from "./tools/protection.js";
 import { registerRunsTools } from "./tools/runs.js";
 import { registerSourcesTools } from "./tools/sources.js";
+import { registerSourceRegistrationTools } from "./tools/source-registration.js";
+import { registerAuditLogTools } from "./tools/audit-logs.js";
+import { registerClusterReportTools } from "./tools/cluster-reports.js";
+import { registerRunActionTools } from "./tools/run-actions.js";
+import { registerUserTools } from "./tools/users.js";
+import { registerRoleTools } from "./tools/roles.js";
+import { registerActiveDirectoryTools } from "./tools/active-directory.js";
 import { registerRecoveryTools } from "./tools/recovery.js";
 import { registerAlertsTools } from "./tools/alerts.js";
 import { registerStorageTools } from "./tools/storage.js";
@@ -49,6 +56,7 @@ function wireTools(server: McpServer, client: CohesityClient): void {
     registerProtectionTools,
     registerRunsTools,
     registerSourcesTools,
+    registerSourceRegistrationTools,
     registerRecoveryTools,
     registerAlertsTools,
     registerStorageTools,
@@ -58,6 +66,12 @@ function wireTools(server: McpServer, client: CohesityClient): void {
     registerTieringTools,
     registerNotificationTools,
     registerStatsTools,
+    registerAuditLogTools,
+    registerClusterReportTools,
+    registerRunActionTools,
+    registerUserTools,
+    registerRoleTools,
+    registerActiveDirectoryTools,
   ];
 
   for (const register of registrations) {
