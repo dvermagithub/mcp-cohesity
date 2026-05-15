@@ -5,6 +5,10 @@
  * Entry point: validates configuration, wires up tool modules, launches STDIO transport.
  */
 
+import { readFileSync } from "node:fs";
+import { homedir } from "node:os";
+import { resolve } from "node:path";
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CohesityClient, CohesityConfig } from "./cohesity-client.js";
@@ -33,23 +37,94 @@ import { registerTieringTools } from "./tools/tiering.js";
 import { registerNotificationTools } from "./tools/notifications.js";
 import { registerStatsTools } from "./tools/stats.js";
 
-/** Read and validate required env vars, returning a typed config object. */
-function loadConfig(): CohesityConfig {
-  const required = ["COHESITY_CLUSTER", "COHESITY_USERNAME", "COHESITY_PASSWORD"] as const;
-  const missing = required.filter((k) => !process.env[k]);
+/**
+ * Shape of an external credentials file (JSON). Same field names as the
+ * env vars but lowercased + camelCase. All optional individually; the
+ * merged set (file + env) must satisfy the required fields below.
+ */
+interface CohesityConfigFile {
+  cluster?: string;
+  username?: string;
+  password?: string;
+  domain?: string;
+  allowSelfSigned?: boolean;
+}
 
+/**
+ * Load credentials from an external JSON file if one is provided or found
+ * at a default location. Reading is best-effort — if the file is missing,
+ * unreadable, or malformed we just return an empty object and let env
+ * vars do the work.
+ *
+ * Resolution order:
+ *   1. $COHESITY_CONFIG_FILE if set (absolute or ~/-expanded path)
+ *   2. ~/.cohesity-mcp/config.json (if it exists)
+ */
+function loadConfigFile(): CohesityConfigFile {
+  const home = homedir();
+  const expand = (p: string) => (p.startsWith("~") ? resolve(home, p.slice(p.startsWith("~/") ? 2 : 1)) : p);
+
+  const explicit = process.env.COHESITY_CONFIG_FILE;
+  const candidates = [
+    explicit && expand(explicit),
+    resolve(home, ".cohesity-mcp", "config.json"),
+  ].filter((p): p is string => !!p);
+
+  for (const path of candidates) {
+    try {
+      const data = readFileSync(path, "utf8");
+      const parsed = JSON.parse(data) as CohesityConfigFile;
+      console.error(`Loaded Cohesity credentials from ${path}`);
+      return parsed;
+    } catch (err: unknown) {
+      // ENOENT (file missing) at the default path is silent; explicit
+      // file path being missing or malformed is a hard error.
+      const e = err as NodeJS.ErrnoException;
+      if (path === explicit) {
+        console.error(`Error reading COHESITY_CONFIG_FILE=${path}: ${e.message}`);
+        process.exit(1);
+      }
+      if (e.code !== "ENOENT") {
+        console.error(`Error reading ${path}: ${e.message}`);
+      }
+    }
+  }
+  return {};
+}
+
+/**
+ * Merge external config file and process env vars, with env vars taking
+ * precedence so users can override individual fields without editing the
+ * file. Returns the typed config object or exits with a clear message
+ * if required fields are still missing.
+ */
+function loadConfig(): CohesityConfig {
+  const file = loadConfigFile();
+
+  const cluster = process.env.COHESITY_CLUSTER ?? file.cluster;
+  const username = process.env.COHESITY_USERNAME ?? file.username;
+  const password = process.env.COHESITY_PASSWORD ?? file.password;
+  const domain = process.env.COHESITY_DOMAIN ?? file.domain ?? "LOCAL";
+
+  // allowSelfSigned defaults to true unless explicitly disabled
+  const envAllow = process.env.COHESITY_ALLOW_SELF_SIGNED;
+  const allowSelfSigned =
+    envAllow !== undefined ? envAllow !== "false" : file.allowSelfSigned !== false;
+
+  const missing: string[] = [];
+  if (!cluster) missing.push("cluster (COHESITY_CLUSTER)");
+  if (!username) missing.push("username (COHESITY_USERNAME)");
+  if (!password) missing.push("password (COHESITY_PASSWORD)");
   if (missing.length > 0) {
-    console.error(`Missing required environment variable(s): ${missing.join(", ")}`);
+    console.error(
+      `Missing required Cohesity credentials: ${missing.join(", ")}.\n` +
+        `Provide them via env vars, or via a JSON file pointed to by COHESITY_CONFIG_FILE\n` +
+        `(or the default ~/.cohesity-mcp/config.json). See README for details.`,
+    );
     process.exit(1);
   }
 
-  return {
-    cluster: process.env.COHESITY_CLUSTER!,
-    username: process.env.COHESITY_USERNAME!,
-    password: process.env.COHESITY_PASSWORD!,
-    domain: process.env.COHESITY_DOMAIN ?? "LOCAL",
-    allowSelfSigned: process.env.COHESITY_ALLOW_SELF_SIGNED !== "false",
-  };
+  return { cluster: cluster!, username: username!, password: password!, domain, allowSelfSigned };
 }
 
 /** Wire every tool module to the MCP server instance. */

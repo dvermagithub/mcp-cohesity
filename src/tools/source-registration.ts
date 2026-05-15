@@ -160,9 +160,25 @@ export function registerSourceRegistrationTools(
   //   applicationCredentials?[{ applicationId, applicationObjectId?, encryptedApplicationKey? }],
   //   useCases?
   // }
+  //
+  // KNOWN CLUSTER-SIDE BUG (some Cohesity builds, observed on 7.x as of
+  // 2026-05): the V2 endpoint's kAzure handler returns
+  //   HTTP 403 "Azure credentials does not have Subscription Id"
+  // for any payload, even with valid creds and a Contributor role on the
+  // subscription. The error is fixed text and returned in <300ms — the
+  // cluster never contacts Azure. The same V2 endpoint works correctly
+  // for kAWS, kS3Compatible, and kVMware on the same cluster, so this is
+  // an Azure-specific implementation gap on the cluster side. The schema
+  // and payload below are correct against the documented OpenAPI v2 spec
+  // and have been validated against Azure directly via Microsoft's OAuth
+  // and Resource Management APIs.
+  //
+  // Workaround: register the Azure source through the Cohesity GUI; all
+  // other Azure MCP tools (search_objects, refresh_source, create
+  // protection group, run, etc.) work normally on the GUI-created source.
   server.tool(
     "register_azure_source",
-    "Register an Azure tenant or subscription as a backup source for protecting Azure VMs, SQL, Files, Blob, and other workloads",
+    "Register an Azure tenant or subscription as a backup source for protecting Azure VMs, SQL, Files, Blob, and other workloads. NOTE: some Cohesity cluster builds have a V2 Azure handler bug that returns 'Azure credentials does not have Subscription Id' even for valid credentials. If you hit this error, register the source via the Cohesity GUI instead — all other Azure MCP tools work normally on a GUI-created source.",
     {
       registration_level: z
         .enum(["kTenant", "kSubscription"])

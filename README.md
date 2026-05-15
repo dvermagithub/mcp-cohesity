@@ -281,6 +281,21 @@ On-prem ICAP-based antivirus. (Anomaly / ransomware behavioural detection is a H
 ## Key Engineering Notes
 
 - **Spec-driven** — every tool's request/response shape is modeled directly from the cluster's OpenAPI v2 spec (`SourceRegistrationRequestParams`, `AuditLog`, `UpdateLocalSnapshotConfig`, etc.), not guessed.
+
+### Known cluster-side bug — Azure source registration
+
+Some Cohesity cluster builds (observed on 7.x as of mid-2026) have a broken V2 handler for `kAzure` source registration. `POST /v2/data-protect/sources/registrations` returns
+
+```
+HTTP 403  {"errorCode":"KInvalidRequest","message":"Azure credentials does not have Subscription Id"}
+```
+
+for any payload — even one that perfectly matches the documented OpenAPI v2 spec, with credentials independently proven valid against Azure (OAuth token works, SP has Contributor role on the subscription, can list resources). The error is hardcoded and returned in <300ms; the cluster never contacts Azure. The exact same V2 endpoint works correctly for **kAWS**, **kS3Compatible**, and **kVMware** on the same cluster.
+
+This MCP server's `register_azure_source` tool stays on the documented V2 path (correct, future-proof). On affected cluster builds:
+
+- **Workaround:** register the Azure source through the Cohesity GUI (Sources → Register → Virtual Machines → Azure → Azure Subscription)
+- All other Azure tools (`list_sources`, `search_objects`, `refresh_source`, `create_protection_group` with `environment=kAzure`, `run_protection_group`, etc.) work normally on the GUI-created source.
 - **Live-validated** — write tools were probed against a real cluster to confirm the cluster accepts the payload shape before shipping.
 - **Auto source refresh** — all CRUD operations (create/update/delete groups, search objects, register source) automatically refresh registered sources so the cluster sees current inventory.
 - **LVM volume path handling** — `recover_files` to original path on LVM-based Linux VMs works correctly by transparently using `alternatePath` to handle Cohesity's `lvol_N/` prefix.
@@ -292,42 +307,76 @@ On-prem ICAP-based antivirus. (Anomaly / ransomware behavioural detection is a H
 
 ## Installation
 
+**From npm** (recommended):
+
+```bash
+npm install -g mcp-cohesity
+```
+
+**From source** (development):
+
 ```bash
 git clone https://github.com/dvermagithub/mcp-cohesity.git
 cd mcp-cohesity
 npm install
 npm run build
+npm link
 ```
 
 ## Configuration
 
-The server is configured via environment variables:
+The server reads credentials in this precedence order:
 
-| Variable | Required | Default | Description |
+1. **JSON config file** at `~/.cohesity-mcp/config.json` (or wherever `COHESITY_CONFIG_FILE` env var points)
+2. **Direct environment variables** (override file values if both are set)
+
+### Recommended — JSON file
+
+Create `~/.cohesity-mcp/config.json` (Linux/macOS: `chmod 600`; Windows: `icacls /inheritance:r /grant:r "$USER:R"`):
+
+```json
+{
+  "cluster": "your-cohesity-cluster.example.com",
+  "username": "admin",
+  "password": "your-password",
+  "domain": "LOCAL",
+  "allowSelfSigned": true
+}
+```
+
+| Field | Required | Default | Description |
 |---|---|---|---|
-| `COHESITY_CLUSTER` | Yes | — | Cohesity cluster hostname or IP |
-| `COHESITY_USERNAME` | Yes | — | Username for authentication |
-| `COHESITY_PASSWORD` | Yes | — | Password for authentication |
-| `COHESITY_DOMAIN` | No | `LOCAL` | Authentication domain |
-| `COHESITY_ALLOW_SELF_SIGNED` | No | `true` | Accept self-signed SSL certs |
+| `cluster` | Yes | — | Cohesity cluster hostname or IP |
+| `username` | Yes | — | Username |
+| `password` | Yes | — | Password |
+| `domain` | No | `LOCAL` | Authentication domain |
+| `allowSelfSigned` | No | `true` | Accept self-signed SSL certs |
+
+### Alternative — environment variables
+
+Same fields, set as `COHESITY_CLUSTER`, `COHESITY_USERNAME`, `COHESITY_PASSWORD`, `COHESITY_DOMAIN`, `COHESITY_ALLOW_SELF_SIGNED`. Useful for Docker, CI, or if you'd rather not put a file on disk.
 
 ## Usage with Claude Desktop
 
-Add to your `claude_desktop_config.json`:
+After `npm install -g mcp-cohesity` (or `npm link` from source) and creating the credentials file above, add to your `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "cohesity": {
-      "command": "node",
-      "args": ["/absolute/path/to/mcp-cohesity/dist/index.js"],
-      "env": {
-        "COHESITY_CLUSTER": "your-cohesity-cluster.example.com",
-        "COHESITY_USERNAME": "admin",
-        "COHESITY_PASSWORD": "your-password",
-        "COHESITY_DOMAIN": "LOCAL",
-        "COHESITY_ALLOW_SELF_SIGNED": "true"
-      }
+      "command": "mcp-cohesity"
+    }
+  }
+}
+```
+
+That's it — no credentials in the Claude config. On Windows you may need to use the full path to the `.cmd` shim:
+
+```json
+{
+  "mcpServers": {
+    "cohesity": {
+      "command": "C:\\Users\\<you>\\AppData\\Roaming\\npm\\mcp-cohesity.cmd"
     }
   }
 }
@@ -336,7 +385,7 @@ Add to your `claude_desktop_config.json`:
 ## Usage with Claude Code
 
 ```bash
-claude mcp add cohesity -- node /absolute/path/to/mcp-cohesity/dist/index.js
+claude mcp add cohesity mcp-cohesity
 ```
 
 ## Example Prompts
