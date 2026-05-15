@@ -4,7 +4,7 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for **C
 
 > Inspired by [fredriksknese/mcp-cohesity](https://github.com/fredriksknese/mcp-cohesity). Entirely rewritten from scratch.
 
-**107 tools across 23 categories**, every tool driven by the cluster's OpenAPI v2 spec and live-validated against a real cluster.
+**108 tools across 23 categories**, every tool driven by the cluster's OpenAPI v2 spec and live-validated against a real cluster.
 
 A full QA test report covering every tool is checked into [tests/TEST_REPORT.md](tests/TEST_REPORT.md), and the harness that produced it ([tests/qa-harness.mjs](tests/qa-harness.mjs)) can be re-run against any cluster.
 
@@ -15,7 +15,7 @@ A full QA test report covering every tool is checked into [tests/TEST_REPORT.md]
 | Category | Tools |
 |---|---|
 | [Cluster](#cluster-2-tools) | 2 |
-| [Source Registration](#source-registration-8-tools) | 8 |
+| [Source Registration](#source-registration-9-tools) | 9 |
 | [Protection Sources](#protection-sources-4-tools) | 4 |
 | [Protection Policies](#protection-policies-4-tools) | 4 |
 | [Protection Groups](#protection-groups-8-tools) | 8 |
@@ -49,7 +49,7 @@ A full QA test report covering every tool is checked into [tests/TEST_REPORT.md]
 | `get_cluster_info` | Cluster name, ID, software version, node count |
 | `get_cluster_stats` | Storage capacity and throughput statistics |
 
-### Source Registration (8 tools)
+### Source Registration (9 tools)
 
 Register new backup sources end-to-end — every shape verified against the cluster's `SourceRegistrationRequestParams` schema.
 
@@ -58,7 +58,8 @@ Register new backup sources end-to-end — every shape verified against the clus
 | `register_vmware_source` | Register a vCenter, ESXi standalone host, or vCloud Director endpoint |
 | `register_physical_source` | Register a physical Linux / Windows / AIX / Solaris / SAP HANA server |
 | `register_azure_source` | Register an Azure tenant or subscription (VM, SQL, Files, Blob, etc.) |
-| `register_aws_source` | Register an AWS account (EC2, RDS, S3, DynamoDB, etc.) |
+| `register_aws_source` | Register an AWS account for IaaS workloads (EC2, RDS, DynamoDB) |
+| `register_s3_compatible_source` | Register an S3-compatible endpoint (AWS S3, MinIO, Ceph, Wasabi, on-prem ECS) — separate code path from AWS IaaS |
 | `register_m365_source` | Register a Microsoft 365 tenant (Exchange, OneDrive, SharePoint, Teams, Groups) |
 | `register_nas_source` | Register a generic NAS mount (NFS3, NFS4.1, SMB/CIFS) |
 | `update_source_registration` | Rotate credentials or change endpoint on an existing registration |

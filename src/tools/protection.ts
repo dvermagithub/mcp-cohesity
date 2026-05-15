@@ -373,8 +373,23 @@ export function registerProtectionTools(
       name: z.string().describe("Name for the new protection group"),
       policy_id: z.string().describe("ID of the protection policy to apply"),
       environment: z
-        .enum(["kVMware", "kPhysical", "kPhysicalFiles", "kSQL", "kOracle",
-               "kNetapp", "kGenericNas", "kIsilon", "kView", "kO365"])
+        .enum([
+          "kVMware",
+          "kPhysical",
+          "kPhysicalFiles",
+          "kSQL",
+          "kOracle",
+          "kNetapp",
+          "kGenericNas",
+          "kIsilon",
+          "kView",
+          "kO365",
+          "kAWS",
+          "kAzure",
+          "kGCP",
+          "kHyperV",
+          "kS3Compatible",
+        ])
         .describe("Environment type of the objects to protect"),
       storage_domain_id: z
         .number()
@@ -382,14 +397,18 @@ export function registerProtectionTools(
       vm_ids: z
         .array(z.number())
         .optional()
-        .describe("List of VMware VM object IDs to protect (for kVMware environment)"),
+        .describe("Object IDs to protect (VMs for kVMware/kHyperV/kAWS/kAzure/kGCP, hosts for kPhysical, etc.)"),
+      aws_workload_type: z
+        .enum(["kEC2", "kRDS", "kS3", "kDynamoDB", "kAurora", "kRedshift"])
+        .optional()
+        .describe("Required for kAWS environment — selects which AWS workload params to use (default: kEC2)"),
       description: z.string().optional().describe("Optional description for the group"),
       priority: z
         .enum(["kLow", "kMedium", "kHigh"])
         .optional()
         .describe("Priority of the protection group"),
     },
-    async ({ name, policy_id, environment, storage_domain_id, vm_ids, description, priority }) => {
+    async ({ name, policy_id, environment, storage_domain_id, vm_ids, aws_workload_type, description, priority }) => {
       try {
         await client.refreshAllSources();
         const body: Record<string, unknown> = {
@@ -400,10 +419,35 @@ export function registerProtectionTools(
         };
         if (description) body.description = description;
         if (priority) body.priority = priority;
+
         if (environment === "kVMware" && vm_ids) {
-          body.vmwareParams = {
-            objects: vm_ids.map((id) => ({ id })),
+          body.vmwareParams = { objects: vm_ids.map((id) => ({ id })) };
+        } else if (environment === "kHyperV" && vm_ids) {
+          body.hypervParams = { objects: vm_ids.map((id) => ({ id })) };
+        } else if (environment === "kAWS" && vm_ids) {
+          // Cohesity uses workload-specific subkeys under awsParams
+          // (awsEc2Params, awsRdsParams, awsS3Params, etc.). Default to EC2.
+          const subkey = {
+            kEC2: "awsEc2Params",
+            kRDS: "awsRdsParams",
+            kS3: "awsS3Params",
+            kDynamoDB: "awsDynamoDbParams",
+            kAurora: "awsAuroraParams",
+            kRedshift: "awsRedshiftParams",
+          }[aws_workload_type ?? "kEC2"];
+          body.awsParams = {
+            protectionType: aws_workload_type ?? "kEC2",
+            [subkey]: { objects: vm_ids.map((id) => ({ id })) },
           };
+        } else if (environment === "kAzure" && vm_ids) {
+          body.azureParams = {
+            protectionType: "kAgent",
+            azureAgentParams: { objects: vm_ids.map((id) => ({ id })) },
+          };
+        } else if (environment === "kGCP" && vm_ids) {
+          body.gcpParams = { objects: vm_ids.map((id) => ({ id })) };
+        } else if (environment === "kS3Compatible" && vm_ids) {
+          body.s3CompatibleParams = { objects: vm_ids.map((id) => ({ id })) };
         }
 
         const result = await client.postV2("data-protect/protection-groups", body);

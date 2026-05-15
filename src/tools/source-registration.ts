@@ -482,6 +482,49 @@ export function registerSourceRegistrationTools(
     },
   );
 
+  // ── S3 Compatible Source ───────────────────────────────────────────────
+  // Schema: S3CompatibleSourceRegistrationParams {
+  //   endpoint (REQUIRED, IP-only — no protocol prefix, no port),
+  //   port (REQUIRED, int),
+  //   accessKeyId (REQUIRED),
+  //   secretAccessKey (REQUIRED)
+  // }
+  // Used to register AWS S3, MinIO, Ceph, Wasabi, Cloudian, on-prem ECS, etc.
+  // For AWS S3 specifically the endpoint is the region's S3 endpoint
+  // (e.g. s3.us-east-1.amazonaws.com) — Cohesity resolves the hostname.
+  server.tool(
+    "register_s3_compatible_source",
+    "Register an S3-compatible object storage endpoint as a backup source. Use for AWS S3, MinIO, Ceph, Wasabi, on-prem ECS, or any S3 API-compatible target.",
+    {
+      endpoint: z
+        .string()
+        .describe("S3 endpoint (e.g. s3.us-east-1.amazonaws.com or 10.0.0.50). Do NOT include https:// prefix or port — those are separate fields."),
+      port: z
+        .number()
+        .int()
+        .default(443)
+        .describe("TCP port (443 for AWS S3 / TLS, 9000 for default MinIO, etc.)"),
+      access_key_id: z.string().describe("S3 access key ID"),
+      secret_access_key: z.string().describe("S3 secret access key"),
+    },
+    async (args) => {
+      try {
+        const body = {
+          environment: "kS3Compatible",
+          s3CompatibleParams: {
+            endpoint: args.endpoint,
+            port: args.port,
+            accessKeyId: args.access_key_id,
+            secretAccessKey: args.secret_access_key,
+          },
+        };
+        return await postRegistration(client, body, `S3-compatible ${args.endpoint}:${args.port}`);
+      } catch (err) {
+        return reply(`Error registering S3-compatible source: ${err}`, true);
+      }
+    },
+  );
+
   // ── Unregister Source ──────────────────────────────────────────────────
   server.tool(
     "unregister_source",
