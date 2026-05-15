@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "mcp-cohesity": "./dist/index.js"
+    "mcp-cohesity": "dist/index.js"
   },
   "files": [
     "dist",
@@ -33,7 +33,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dvermagithub/CohesityMCP.git"
+    "url": "git+https://github.com/dvermagithub/CohesityMCP.git"
   },
   "homepage": "https://github.com/dvermagithub/CohesityMCP",
   "bugs": {
